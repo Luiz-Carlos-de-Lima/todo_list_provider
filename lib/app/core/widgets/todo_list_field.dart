@@ -11,11 +11,11 @@ class TodoListField extends StatefulWidget {
 }
 
 class _TodoListFieldState extends State<TodoListField> {
-  bool obscure = false;
+  final obscure = ValueNotifier<bool>(false);
 
   @override
   void initState() {
-    obscure = widget.obscureText;
+    obscure.value = widget.obscureText;
     super.initState();
   }
 
@@ -23,18 +23,22 @@ class _TodoListFieldState extends State<TodoListField> {
   Widget build(BuildContext context) {
     return TextFormField(
       expands: false,
-      obscureText: obscure,
+      obscureText: obscure.value,
       decoration: InputDecoration(
         constraints: BoxConstraints(maxHeight: 60, minHeight: 60),
         hintText: widget.labelText,
         suffixIcon: widget.obscureText
             ? IconButton(
                 onPressed: () {
-                  obscure = !obscure;
-                  setState(() {});
+                  obscure.value = !obscure.value;
                 },
-                icon: Icon(
-                  obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                icon: AnimatedBuilder(
+                  animation: obscure,
+                  builder: (context, _) {
+                    return Icon(
+                      obscure.value ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    );
+                  },
                 ),
               )
             : null,
