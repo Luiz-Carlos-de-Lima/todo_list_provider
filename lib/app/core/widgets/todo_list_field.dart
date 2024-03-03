@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class TodoListField extends StatefulWidget {
   final String labelText;
   final bool obscureText;
+  final bool enableSwapObscure;
 
-  const TodoListField({super.key, required this.labelText, this.obscureText = false});
+  const TodoListField({super.key, required this.labelText, this.obscureText = false, this.enableSwapObscure = false});
 
   @override
   State<TodoListField> createState() => _TodoListFieldState();
@@ -27,7 +28,7 @@ class _TodoListFieldState extends State<TodoListField> {
       decoration: InputDecoration(
         constraints: BoxConstraints(maxHeight: 60, minHeight: 60),
         hintText: widget.labelText,
-        suffixIcon: widget.obscureText
+        suffixIcon: widget.enableSwapObscure
             ? IconButton(
                 onPressed: () {
                   obscure.value = !obscure.value;
@@ -44,6 +45,7 @@ class _TodoListFieldState extends State<TodoListField> {
             : null,
         hintStyle: TextStyle(
           fontSize: 15,
+          fontWeight: FontWeight.bold,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
