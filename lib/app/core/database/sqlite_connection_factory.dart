@@ -19,7 +19,7 @@ class SqliteConnectionFactory {
 
   factory SqliteConnectionFactory() {
     if (_instance == null) {
-      _instance = SqliteConnectionFactory();
+      _instance = SqliteConnectionFactory._();
     }
 
     return _instance!;
@@ -49,6 +49,7 @@ class SqliteConnectionFactory {
   }
 
   void closeConnection() {
+    print('Fechou');
     _db?.close();
     _db = null;
   }

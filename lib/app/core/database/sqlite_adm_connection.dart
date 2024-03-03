@@ -4,7 +4,7 @@ import 'package:todo_list_provider/app/core/database/sqlite_connection_factory.d
 class SqliteAdmConnection with WidgetsBindingObserver {
   final connection = SqliteConnectionFactory();
 
-  @override
+  // @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
@@ -12,6 +12,7 @@ class SqliteAdmConnection with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
         connection.closeConnection();
         break;
     }
