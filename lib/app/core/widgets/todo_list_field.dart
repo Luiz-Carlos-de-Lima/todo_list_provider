@@ -22,40 +22,39 @@ class _TodoListFieldState extends State<TodoListField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      expands: false,
-      obscureText: obscure.value,
-      decoration: InputDecoration(
-        constraints: BoxConstraints(maxHeight: 60, minHeight: 60),
-        hintText: widget.labelText,
-        suffixIcon: widget.enableSwapObscure
-            ? IconButton(
-                onPressed: () {
-                  obscure.value = !obscure.value;
-                },
-                icon: AnimatedBuilder(
-                  animation: obscure,
-                  builder: (context, _) {
-                    return Icon(
-                      obscure.value ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                    );
-                  },
-                ),
-              )
-            : null,
-        hintStyle: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(width: 2),
-        ),
-      ),
-    );
+    return AnimatedBuilder(
+        animation: obscure,
+        builder: (context, _) {
+          return TextFormField(
+            expands: false,
+            obscureText: obscure.value,
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxHeight: 60, minHeight: 60),
+              hintText: widget.labelText,
+              suffixIcon: widget.enableSwapObscure
+                  ? IconButton(
+                      onPressed: () {
+                        obscure.value = !obscure.value;
+                      },
+                      icon: Icon(
+                        obscure.value ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      ),
+                    )
+                  : null,
+              hintStyle: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(width: 2),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(width: 2),
+              ),
+            ),
+          );
+        });
   }
 }
