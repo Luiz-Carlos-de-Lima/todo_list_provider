@@ -4,8 +4,10 @@ class TodoListField extends StatefulWidget {
   final String labelText;
   final bool obscureText;
   final bool enableSwapObscure;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
 
-  const TodoListField({super.key, required this.labelText, this.obscureText = false, this.enableSwapObscure = false});
+  const TodoListField({super.key, required this.labelText, this.obscureText = false, this.enableSwapObscure = false, required this.controller, this.validator});
 
   @override
   State<TodoListField> createState() => _TodoListFieldState();
@@ -25,34 +27,40 @@ class _TodoListFieldState extends State<TodoListField> {
     return AnimatedBuilder(
         animation: obscure,
         builder: (context, _) {
-          return TextFormField(
-            expands: false,
-            obscureText: obscure.value,
-            decoration: InputDecoration(
-              constraints: BoxConstraints(maxHeight: 60, minHeight: 60),
-              hintText: widget.labelText,
-              suffixIcon: widget.enableSwapObscure
-                  ? IconButton(
-                      onPressed: () {
-                        obscure.value = !obscure.value;
-                      },
-                      icon: Icon(
-                        obscure.value ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                      ),
-                    )
-                  : null,
-              hintStyle: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+          return SizedBox(
+            child: TextFormField(
+              expands: false,
+              controller: widget.controller,
+              obscureText: obscure.value,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(15),
+                isCollapsed: true,
+                isDense: true,
+                hintText: widget.labelText,
+                suffixIcon: widget.enableSwapObscure
+                    ? IconButton(
+                        onPressed: () {
+                          obscure.value = !obscure.value;
+                        },
+                        icon: Icon(
+                          obscure.value ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                        ),
+                      )
+                    : null,
+                hintStyle: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(width: 2),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(width: 2),
+                ),
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(width: 2),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(width: 2),
-              ),
+              validator: widget.validator,
             ),
           );
         });

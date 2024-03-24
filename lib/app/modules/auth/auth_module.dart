@@ -18,7 +18,7 @@ class AuthModule extends TodoListModules {
   static List<SingleChildWidget>? get _bindings {
     return [
       ChangeNotifierProvider(create: (_) => LoginController()),
-      ChangeNotifierProvider(create: (_) => RegisterController()),
+      ChangeNotifierProvider(create: (context) => RegisterController(userService: context.read())),
     ];
   }
 

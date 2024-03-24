@@ -6,8 +6,24 @@ import 'package:todo_list_provider/app/core/widgets/todo_list_logo.dart';
 
 import '../../../core/widgets/todo_list_field.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailEC = TextEditingController();
+  final _passwordEC = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailEC.dispose();
+    _passwordEC.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +44,19 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
                       child: Form(
+                        key: _formKey,
                         child: Column(
                           children: [
                             TodoListField(
                               labelText: 'E-mail',
+                              controller: _emailEC,
                             ),
                             const SizedBox(
                               height: 20.0,
                             ),
                             TodoListField(
                               labelText: 'Senha',
+                              controller: _passwordEC,
                               enableSwapObscure: true,
                               obscureText: true,
                             ),

@@ -10,6 +10,6 @@ class UserServiceImpl implements UserService {
 
   //funcao é apenas um proxy, pois a camada de repositorio deve passar pela camada de service para ir para a controller da tela.
   Future<User?> register({required String email, required String password}) async {
-    await _userRepository.register(email: email, password: password);
+    return await _userRepository.register(email: email, password: password);
   }
 }
