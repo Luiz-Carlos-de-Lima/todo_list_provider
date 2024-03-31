@@ -16,7 +16,6 @@ class _AppWidgetState extends State<AppWidget> {
 
   @override
   void initState() {
-    print('Passou Aqui');
     WidgetsBinding.instance.addObserver(sqliteAdmConnection);
     super.initState();
   }
