@@ -6,4 +6,6 @@ abstract class UserService {
   Future<User?> login({required String email, required String password});
 
   Future<void> recoverPassword({required String email});
+
+  Future<User?> googleLogin();
 }

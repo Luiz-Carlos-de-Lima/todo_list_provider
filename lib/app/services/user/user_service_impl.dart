@@ -21,4 +21,9 @@ class UserServiceImpl implements UserService {
   Future<void> recoverPassword({required String email}) async {
     await _userRepository.recoverPassword(email: email);
   }
+
+  @override
+  Future<User?> googleLogin() async {
+    return await _userRepository.googleLogin();
+  }
 }

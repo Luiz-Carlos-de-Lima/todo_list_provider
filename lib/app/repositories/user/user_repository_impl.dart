@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:todo_list_provider/app/core/exceptions/auth_exception.dart';
 import 'package:todo_list_provider/app/repositories/user/user_repository.dart';
 
@@ -64,7 +65,15 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> recoverPassword({required String email}) async {
     try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      final loginTypes = await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+      if (loginTypes.contains('password')) {
+        await _firebaseAuth.sendPasswordResetEmail(email: email);
+      } else if (loginTypes.contains('google')) {
+        throw AuthException(message: 'Cadastrou realizado pelo google, não pode ser resetado a senha');
+      } else {
+        throw AuthException(message: 'E-mail não cadastrado.');
+      }
     } on FirebaseAuthException catch (e, s) {
       log(e.toString());
       log(s.toString());
@@ -74,10 +83,38 @@ class UserRepositoryImpl implements UserRepository {
       } else {
         throw AuthException(message: 'Erro ao tentar fazer a solicitação para trocar a senha.');
       }
-    } catch (e, s) {
+    }
+  }
+
+  @override
+  Future<User?> googleLogin() async {
+    List<String>? loginMethods;
+    try {
+      final googleSignIn = await GoogleSignIn();
+      final googleUser = await googleSignIn.signIn();
+
+      if (googleUser != null) {
+        loginMethods = await _firebaseAuth.fetchSignInMethodsForEmail(googleUser.email);
+        if (loginMethods.contains('password')) {
+          throw AuthException(message: 'Você já se cadastrou no todo list usando o cadastro com e-mail e senha.');
+        } else {
+          final googleAuth = await googleUser.authentication;
+          final firebaseCredential = GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+          final userCredential = await _firebaseAuth.signInWithCredential(firebaseCredential);
+          return userCredential.user;
+        }
+      } else {
+        throw AuthException(message: 'Ação cancelada.');
+      }
+    } on FirebaseAuthException catch (e, s) {
       log(e.toString());
       log(s.toString());
-      throw AuthException(message: 'Erro ao fazer a solicitação.');
+
+      if (e.code == 'account-exists-with-different-credential') {
+        throw AuthException(message: 'Login inválido, você se cadastrou no todo list com os seguintes provedores. ${loginMethods?.join(',')}');
+      } else {
+        throw AuthException(message: 'Erro ao realizar login.');
+      }
     }
   }
 }

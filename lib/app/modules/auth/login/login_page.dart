@@ -158,7 +158,9 @@ class _LoginPageState extends State<LoginPage> {
                               text: 'Continue com o Google',
                               padding: EdgeInsets.all(5.0),
                               shape: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await context.read<LoginController>().loginGoogle();
+                              },
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
