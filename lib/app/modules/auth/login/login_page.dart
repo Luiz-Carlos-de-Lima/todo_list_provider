@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/core/notifier/default_listerner_notifier.dart';
+import 'package:todo_list_provider/app/core/ui/messages.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extension.dart';
 import 'package:todo_list_provider/app/core/widgets/todo_list_logo.dart';
+import 'package:todo_list_provider/app/modules/auth/login/login_controller.dart';
+import 'package:validatorless/validatorless.dart';
 
 import '../../../core/widgets/todo_list_field.dart';
 
@@ -17,11 +22,27 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    DefaultListernerNotifier(changeNotifier: context.read<LoginController>()).lister(
+      context: context,
+      successCallback: (notifier, listernerInstance) {
+        listernerInstance.dispose();
+        print('Deu Boa');
+        //TODO DIRECIONO PARA A PAGINA DE HOME
+      },
+    );
+
+    super.initState();
+  }
 
   @override
   void dispose() {
     _emailEC.dispose();
     _passwordEC.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -50,6 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                             TodoListField(
                               labelText: 'E-mail',
                               controller: _emailEC,
+                              focusNode: _focusNode,
+                              validator: Validatorless.multiple([
+                                Validatorless.required('O E-mail é obrigatório'),
+                                Validatorless.email('insira um E-mail válido'),
+                              ]),
                             ),
                             const SizedBox(
                               height: 20.0,
@@ -57,6 +83,10 @@ class _LoginPageState extends State<LoginPage> {
                             TodoListField(
                               labelText: 'Senha',
                               controller: _passwordEC,
+                              validator: Validatorless.multiple([
+                                Validatorless.required('A senha é obrigatória'),
+                                Validatorless.min(6, 'A senha deve ter no minímo 6 caracteres'),
+                              ]),
                               enableSwapObscure: true,
                               obscureText: true,
                             ),
@@ -66,9 +96,24 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TextButton(onPressed: () {}, child: Text('Esqueceu sua senha?')),
+                                TextButton(
+                                    onPressed: () async {
+                                      if (_emailEC.text.isEmpty) {
+                                        _focusNode.requestFocus();
+                                        Messages.of(context).showError('Digite um e-mail para recuperar a senha');
+                                      }
+
+                                      await context.read<LoginController>().recoverPassword(email: _emailEC.text);
+                                    },
+                                    child: Text('Esqueceu sua senha?')),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    bool formIsValid = _formKey.currentState?.validate() ?? false;
+
+                                    if (formIsValid) {
+                                      await context.read<LoginController>().login(email: _emailEC.text, password: _passwordEC.text);
+                                    }
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: context.buttonColor,
                                     shape: RoundedRectangleBorder(

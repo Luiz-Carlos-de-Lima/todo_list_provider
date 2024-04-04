@@ -36,4 +36,48 @@ class UserRepositoryImpl implements UserRepository {
       throw AuthException(message: 'Erro ao registrar usuário');
     }
   }
+
+  @override
+  Future<User?> login({required String email, required String password}) async {
+    try {
+      final user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+
+      return user.user;
+    } on FirebaseAuthException catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+
+      if (e.code == 'user-not-found') {
+        throw AuthException(message: 'Usuário não encontrado, Para continuar cadastre-se');
+      } else if (e.code == 'too-many-requests') {
+        throw AuthException(message: 'Erro ao fazer o login, Verifique e-mail e senha e tente novamente');
+      } else {
+        throw AuthException(message: 'Erro ao fazer o login');
+      }
+    } catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+      throw AuthException(message: 'Erro ao fazer o login usuário');
+    }
+  }
+
+  @override
+  Future<void> recoverPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+
+      if (e.code == 'user-not-found') {
+        throw AuthException(message: 'Usuário não encontrado, Para continuar cadastre-se');
+      } else {
+        throw AuthException(message: 'Erro ao tentar fazer a solicitação para trocar a senha.');
+      }
+    } catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+      throw AuthException(message: 'Erro ao fazer a solicitação.');
+    }
+  }
 }

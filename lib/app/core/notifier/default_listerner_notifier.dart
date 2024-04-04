@@ -20,7 +20,9 @@ class DefaultListernerNotifier {
         if (errorCallback != null) {
           errorCallback(changeNotifier, this);
         }
-        Messages.of(context).showError(changeNotifier.error ?? 'Erro interno');
+        Messages.of(context).showError(changeNotifier.error ?? 'Erro interno.');
+      } else if (changeNotifier.hasSuccessMessage) {
+        Messages.of(context).showInfo(changeNotifier.successMessage ?? 'A solicitação foi aceita.');
       } else if (changeNotifier.isSuccess) {
         successCallback(changeNotifier, this);
       }

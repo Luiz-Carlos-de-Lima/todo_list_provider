@@ -12,4 +12,13 @@ class UserServiceImpl implements UserService {
   Future<User?> register({required String email, required String password}) async {
     return await _userRepository.register(email: email, password: password);
   }
+
+  Future<User?> login({required String email, required String password}) async {
+    return await _userRepository.login(email: email, password: password);
+  }
+
+  @override
+  Future<void> recoverPassword({required String email}) async {
+    await _userRepository.recoverPassword(email: email);
+  }
 }

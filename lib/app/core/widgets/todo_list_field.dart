@@ -6,8 +6,9 @@ class TodoListField extends StatefulWidget {
   final bool enableSwapObscure;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final FocusNode? focusNode;
 
-  const TodoListField({super.key, required this.labelText, this.obscureText = false, this.enableSwapObscure = false, required this.controller, this.validator});
+  const TodoListField({super.key, required this.labelText, this.obscureText = false, this.enableSwapObscure = false, required this.controller, this.validator, this.focusNode});
 
   @override
   State<TodoListField> createState() => _TodoListFieldState();
@@ -32,6 +33,7 @@ class _TodoListFieldState extends State<TodoListField> {
               expands: false,
               controller: widget.controller,
               obscureText: obscure.value,
+              focusNode: widget.focusNode,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(15),
                 isCollapsed: true,
