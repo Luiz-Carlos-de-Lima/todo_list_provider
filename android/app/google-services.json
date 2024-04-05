@@ -14,42 +14,13 @@
       },
       "oauth_client": [
         {
-          "client_id": "339952436345-j3l51veusre75sk6cg3hg5kq10s14o0r.apps.googleusercontent.com",
+          "client_id": "339952436345-u4uab90m0uhm0oikvgdus6vpsi3cmo85.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "br.com.luizcarlosdelima.todo_list_provider",
-            "certificate_hash": "f08f3da00f63d51b1a77804a83f1775d0dfeb0d7"
+            "certificate_hash": "0ececc8f365fef09cb426a521d956ba55776c20c"
           }
         },
-        {
-          "client_id": "339952436345-tuqq2b61c6s847j5eucdrs4nj1bdcsp1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCeJaYochtSKrL4u1gB9Vfy1fDAwwFq330"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "339952436345-tuqq2b61c6s847j5eucdrs4nj1bdcsp1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:339952436345:android:2fc0efffd959e4812240a8",
-        "android_client_info": {
-          "package_name": "com.example.todo_list_provider"
-        }
-      },
-      "oauth_client": [
         {
           "client_id": "339952436345-tuqq2b61c6s847j5eucdrs4nj1bdcsp1.apps.googleusercontent.com",
           "client_type": 3

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:todo_list_provider/app/core/exceptions/auth_exception.dart';
 import 'package:todo_list_provider/app/repositories/user/user_repository.dart';
@@ -69,7 +70,7 @@ class UserRepositoryImpl implements UserRepository {
 
       if (loginTypes.contains('password')) {
         await _firebaseAuth.sendPasswordResetEmail(email: email);
-      } else if (loginTypes.contains('google')) {
+      } else if (loginTypes.contains('google.com')) {
         throw AuthException(message: 'Cadastrou realizado pelo google, não pode ser resetado a senha');
       } else {
         throw AuthException(message: 'E-mail não cadastrado.');
@@ -91,7 +92,7 @@ class UserRepositoryImpl implements UserRepository {
     List<String>? loginMethods;
     try {
       final googleSignIn = await GoogleSignIn();
-      final googleUser = await googleSignIn.signIn();
+      var googleUser = await googleSignIn.signIn();
 
       if (googleUser != null) {
         loginMethods = await _firebaseAuth.fetchSignInMethodsForEmail(googleUser.email);
@@ -115,6 +116,21 @@ class UserRepositoryImpl implements UserRepository {
       } else {
         throw AuthException(message: 'Erro ao realizar login.');
       }
+    } on PlatformException catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+
+      if (e.code == 'sign_in_failed') {
+        throw AuthException(message: 'Falha ao tentar fazer o login');
+      } else {
+        throw AuthException(message: 'Erro ao realizar login.');
+      }
     }
+  }
+
+  @override
+  Future<void> googleLogOut() async {
+    await GoogleSignIn().signOut();
+    _firebaseAuth.signOut();
   }
 }

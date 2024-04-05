@@ -57,14 +57,18 @@ class LoginController extends DefaultChangeNotifier {
       if (user != null) {
         success();
       } else {
+        await userService.googleLogOut();
         setError('Erro ao tentar fazer o login');
       }
     } on AuthException catch (e, s) {
       log(e.message.toString());
       log(s.toString());
+      await userService.googleLogOut();
       setError(e.message);
     } catch (e) {
+      await userService.googleLogOut();
       log('Ocorreu um erro não esperado ao tentar fazer o login.');
+      setError('Ocorreu um erro não esperado ao tentar fazer o login.');
     } finally {
       hideLoader();
       notifyListeners();

@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCeJaYochtSKrL4u1gB9Vfy1fDAwwFq330',
-    appId: '1:339952436345:android:2fc0efffd959e4812240a8',
+    appId: '1:339952436345:android:c740db345b7b55052240a8',
     messagingSenderId: '339952436345',
     projectId: 'todo-list-provider-d0385',
     storageBucket: 'todo-list-provider-d0385.appspot.com',

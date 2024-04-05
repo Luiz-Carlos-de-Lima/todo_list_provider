@@ -8,4 +8,6 @@ abstract class UserService {
   Future<void> recoverPassword({required String email});
 
   Future<User?> googleLogin();
+
+  Future<void> googleLogOut();
 }
