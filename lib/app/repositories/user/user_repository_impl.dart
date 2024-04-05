@@ -42,6 +42,12 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<User?> login({required String email, required String password}) async {
     try {
+      final loginTypes = await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+      if (loginTypes.contains('google.com')) {
+        throw AuthException(message: 'Cadastrou realizado pelo google, não pode ser resetado a senha');
+      }
+
       final user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
 
       return user.user;
@@ -132,5 +138,14 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> logout() async {
     await GoogleSignIn().signOut();
     _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> updateDisplayName({required String name}) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      await user.updateDisplayName(name);
+      user.reload();
+    }
   }
 }

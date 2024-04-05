@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/core/constants/routes.dart';
 import 'package:todo_list_provider/app/core/notifier/default_listerner_notifier.dart';
 import 'package:todo_list_provider/app/core/ui/messages.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extension.dart';
@@ -168,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Text('Não tem conta?'),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed('/register');
+                                    Navigator.of(context).pushNamed(Routers.register);
                                   },
                                   child: Text(
                                     'Cadastre-se',
