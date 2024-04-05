@@ -9,5 +9,5 @@ abstract class UserService {
 
   Future<User?> googleLogin();
 
-  Future<void> googleLogOut();
+  Future<void> logout();
 }
